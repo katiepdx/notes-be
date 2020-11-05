@@ -18,4 +18,16 @@ describe('notes-be routes', () => {
         })
       })
   })
+
+  it('should get all notes in the database using GET', async () => {
+    await request(app)
+      .get('/api/v1/notes')
+      .then(res => {
+        expect(res.body).toEqual(expect.arrayContaining([{
+          id: expect.any(String),
+          topic: expect.any(String),
+          note: expect.any(String)
+        }]))
+      })
+  })
 });
