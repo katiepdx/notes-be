@@ -1,13 +1,8 @@
-const fs = require('fs');
-const pool = require('../lib/utils/pool');
+require('../lib/data/data-helpers')
 const request = require('supertest');
 const app = require('../lib/app');
 
 describe('notes-be routes', () => {
-  beforeEach(() => {
-    return pool.query(fs.readFileSync('./sql/setup.sql', 'utf-8'))
-  });
-
   it('should add a note to the database table using POST', async () => {
     return await request(app)
       .post('/api/v1/notes')
