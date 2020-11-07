@@ -30,4 +30,16 @@ describe('notes-be routes', () => {
         }]))
       })
   })
+
+  it('should get a single note by id from the database using GET', async () => {
+    await request(app)
+      .get('/api/v1/notes/1')
+      .then(res => {
+        expect(res.body).toEqual({
+          id: '1',
+          topic: expect.any(String),
+          note: expect.any(String)
+        })
+      })
+  })
 });
