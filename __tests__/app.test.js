@@ -58,4 +58,16 @@ describe('notes-be routes', () => {
         })
       })
   })
+
+  it('should delete a single note by id from the database using DELETE', async () => {
+    await request(app)
+      .delete('/api/v1/notes/1')
+      .then(res => {
+        expect(res.body).toEqual({
+          id: '1',
+          topic: expect.any(String),
+          note: expect.any(String)
+        })
+      })
+  })
 });
