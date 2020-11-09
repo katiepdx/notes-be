@@ -42,4 +42,20 @@ describe('notes-be routes', () => {
         })
       })
   })
+
+  it('should update a single note by id from the database using PUT', async () => {
+    await request(app)
+      .put('/api/v1/notes/1')
+      .send({
+        topic: 'Update test 1 topic',
+        note: 'Update test 1 note'
+      })
+      .then(res => {
+        expect(res.body).toEqual({
+          id: '1',
+          topic: expect.any(String),
+          note: expect.any(String)
+        })
+      })
+  })
 });
