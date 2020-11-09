@@ -1,10 +1,73 @@
-const fs = require('fs');
-const pool = require('../lib/utils/pool');
+require('../lib/data/data-helpers')
 const request = require('supertest');
 const app = require('../lib/app');
 
 describe('notes-be routes', () => {
-  beforeEach(() => {
-    return pool.query(fs.readFileSync('./sql/setup.sql', 'utf-8'))
-  });
+  it('should add a note to the database table using POST', async () => {
+    return await request(app)
+      .post('/api/v1/notes')
+      .send({
+        topic: 'JavaScript',
+        note: 'My JavaScript note'
+      })
+      .then(res => {
+        expect(res.body).toEqual({
+          id: expect.any(String),
+          topic: 'JavaScript',
+          note: 'My JavaScript note'
+        })
+      })
+  })
+
+  it('should get all notes in the database using GET', async () => {
+    await request(app)
+      .get('/api/v1/notes')
+      .then(res => {
+        expect(res.body).toEqual(expect.arrayContaining([{
+          id: expect.any(String),
+          topic: expect.any(String),
+          note: expect.any(String)
+        }]))
+      })
+  })
+
+  it('should get a single note by id from the database using GET', async () => {
+    await request(app)
+      .get('/api/v1/notes/1')
+      .then(res => {
+        expect(res.body).toEqual({
+          id: '1',
+          topic: expect.any(String),
+          note: expect.any(String)
+        })
+      })
+  })
+
+  it('should update a single note by id from the database using PUT', async () => {
+    await request(app)
+      .put('/api/v1/notes/1')
+      .send({
+        topic: 'Update test 1 topic',
+        note: 'Update test 1 note'
+      })
+      .then(res => {
+        expect(res.body).toEqual({
+          id: '1',
+          topic: expect.any(String),
+          note: expect.any(String)
+        })
+      })
+  })
+
+  it('should delete a single note by id from the database using DELETE', async () => {
+    await request(app)
+      .delete('/api/v1/notes/1')
+      .then(res => {
+        expect(res.body).toEqual({
+          id: '1',
+          topic: expect.any(String),
+          note: expect.any(String)
+        })
+      })
+  })
 });
